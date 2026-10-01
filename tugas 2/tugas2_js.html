@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>tugas 2 javascript - data pegawai</title>
+  </head>
+  <body>
+    <script>
+      //data pegawai
+      var dataPegawai = {
+        nama: "Dodi Prayodi",
+        umur: 25,
+        jabatan: "manajer",
+        status: "menikah",
+      };
+
+      document.write("<table border='1'>");
+      document.write("<thead>");
+      document.write("<tr>");
+      document.write("<th>Nama</th>");
+      document.write("<th>Umur</th>");
+      document.write("<th>Jabatan</th>");
+      document.write("<th>Status</th>");
+      document.write("<th>Gaji Pokok</th>");
+      document.write("<th>Tunjangan</th>");
+      document.write("<th>BPJS</th>");
+      document.write("<th>Tunjangan Keluarga</th>");
+      document.write("</tr>");
+      document.write("</thead>");
+
+      document.write("<tbody>");
+      document.write("<tr>");
+      document.write("<td>" + dataPegawai.nama + "</td>");
+      document.write("<td>" + dataPegawai.umur + "</td>");
+      document.write("<td>" + dataPegawai.jabatan + "</td>");
+      document.write("<td>" + dataPegawai.status + "</td>");
+
+      //menghitung gaji pokok
+      function getGajiPokok() {
+        if (dataPegawai.jabatan === "manajer") {
+          return 15000000;
+        } else if (dataPegawai.jabatan === "asisten manajer") {
+          return 10000000;
+        } else if (dataPegawai.jabatan === "staff") {
+          return 5000000;
+        } else {
+          return 0;
+        }
+      }
+      let gajiPokok = getGajiPokok();
+      document.write("<td>" + gajiPokok + "</td>");
+
+      //menghitung tunjangan
+      let tunjangan = gajiPokok * 0.15;
+      document.write("<td>" + tunjangan + "</td>");
+
+      //menghitung BPJS
+      let bpjs = gajiPokok * 0.1;
+      document.write("<td>" + bpjs + "</td>");
+
+      //menghitung tunjangan keluarga
+      let tunjanganKeluarga =
+        dataPegawai.status === "menikah" ? gajiPokok * 0.2 : 0;
+      document.write("<td>" + tunjanganKeluarga + "</td>");
+      document.write("</tr>");
+      document.write("</tbody>");
+      document.write("<tfoot>");
+      document.write("<tr>");
+      document.write("<td colspan='7'>Total Gaji</td>");
+      let totalGaji = gajiPokok + tunjangan + bpjs + tunjanganKeluarga;
+      document.write("<td>" + totalGaji + "</td>");
+      document.write("</tr>");
+      document.write("</tfoot>");
+      document.write("</table>");
+    </script>
+  </body>
+</html>

@@ -70,7 +70,11 @@
             harga: harga,
           },
         ];
-
+        console.log("Produk baru telah ditambahkan:", {
+          id: idBaru,
+          nama,
+          harga,
+        });
         tampilkanProduk();
       }
 
@@ -81,6 +85,7 @@
         const [id] = dataId;
 
         produkList = produkList.filter((produk) => produk.id !== id);
+        console.log("Produk dengan ID", id, "telah dihapus.");
 
         tampilkanProduk();
       }

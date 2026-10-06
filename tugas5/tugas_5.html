@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manajemen Produk</title>
+  </head>
+
+  <body>
+    <h1>Manajemen Produk</h1>
+
+    <form id="formProduk">
+      <label for="namaProduk">Nama produk:</label>
+      <input id="namaProduk" name="namaProduk" type="text" required />
+
+      <label for="hargaProduk">Harga (Rp):</label>
+      <input
+        id="hargaProduk"
+        name="hargaProduk"
+        type="number"
+        min="1"
+        step="1"
+        required
+      />
+
+      <button id="tambahProduk" type="submit">Tambah Produk</button>
+    </form>
+
+    <br />
+
+    <table id="produkTable" border="1">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nama Produk</th>
+          <th>Harga</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+
+      <tbody id="daftarProduk"></tbody>
+    </table>
+
+    <script>
+      // DATA PRODUK
+
+      let produkList = [
+        { id: 1, nama: "Laptop", harga: 12000000 },
+        { id: 2, nama: "Smartphone", harga: 1200000 },
+        { id: 3, nama: "Tablet", harga: 2000000 },
+        { id: 4, nama: "Monitor", harga: 3000000 },
+        { id: 5, nama: "Keyboard", harga: 450000 },
+      ];
+
+      // MENAMBAHKAN PRODUK
+
+      function tambahProduk(...dataProduk) {
+        // Destructuring array
+        const [nama, harga] = dataProduk;
+
+        // Mencari ID terbesar
+        const idBaru = Math.max(0, ...produkList.map(({ id }) => id)) + 1;
+
+        // Spread Operator untuk membuat array baru
+        produkList = [
+          ...produkList,
+          {
+            id: idBaru,
+            nama: nama,
+            harga: harga,
+          },
+        ];
+
+        tampilkanProduk();
+      }
+
+      // MENGHAPUS PRODUK
+
+      function hapusProduk(...dataId) {
+        // Destructuring
+        const [id] = dataId;
+
+        produkList = produkList.filter((produk) => produk.id !== id);
+
+        tampilkanProduk();
+      }
+
+      // MENAMPILKAN PRODUK
+
+      function tampilkanProduk() {
+        const daftarProduk = document.getElementById("daftarProduk");
+
+        daftarProduk.replaceChildren();
+
+        produkList.forEach(({ id, nama, harga }) => {
+          const baris = document.createElement("tr");
+
+          // Destructuring object
+          [id, nama, `Rp ${harga.toLocaleString("id-ID")}`].forEach((nilai) => {
+            const kolom = document.createElement("td");
+
+            kolom.textContent = nilai;
+
+            baris.append(kolom);
+          });
+
+          // Membuat tombol hapus
+          const kolomAksi = document.createElement("td");
+
+          const tombolHapus = document.createElement("button");
+
+          tombolHapus.type = "button";
+          tombolHapus.dataset.id = id;
+          tombolHapus.textContent = "Hapus";
+
+          kolomAksi.append(tombolHapus);
+          baris.append(kolomAksi);
+
+          daftarProduk.append(baris);
+        });
+      }
+
+      // EVENT HANDLER
+
+      const eventHandler = {
+        // Event saat form disubmit
+        tambah: function (event) {
+          event.preventDefault();
+
+          const formData = new FormData(event.currentTarget);
+
+          const nama = formData.get("namaProduk").trim();
+
+          const harga = Number(formData.get("hargaProduk"));
+
+          tambahProduk(nama, harga);
+
+          event.currentTarget.reset();
+        },
+
+        // Event saat tombol hapus diklik
+        hapus: function (event) {
+          if (!(event.target instanceof Element)) {
+            return;
+          }
+
+          const tombolHapus = event.target.closest("button[data-id]");
+
+          if (tombolHapus) {
+            hapusProduk(Number(tombolHapus.dataset.id));
+          }
+        },
+      };
+
+      // EVENT LISTENER
+
+      document
+        .getElementById("formProduk")
+        .addEventListener("submit", eventHandler.tambah);
+
+      document
+        .getElementById("daftarProduk")
+        .addEventListener("click", eventHandler.hapus);
+
+      // Menampilkan produk ketika halaman pertama dibuka
+      tampilkanProduk();
+    </script>
+  </body>
+</html>
